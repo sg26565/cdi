@@ -46,11 +46,13 @@ public class TracingInterceptor {
 		final Class<?> returnType = method.getReturnType();
 		final Object[] parameters = ctx.getParameters();
 		logger = LoggerFactory.getLogger(method.getDeclaringClass());
-		Tracing annotation = method.getAnnotation(Tracing.class);
-		if (annotation != null)
+		final Tracing annotation = method.getAnnotation(Tracing.class);
+		if (annotation != null) {
 			level = annotation.level();
-		else
+		} else {
+			// @Interceptors annotation was used instead of @Tracing meta annotation
 			level = Level.DEBUG;
+		}
 
 		log("Method entry: {}({})", methodName, parameters);
 
