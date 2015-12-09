@@ -46,13 +46,17 @@ public class TracingInterceptor {
 		final Class<?> returnType = method.getReturnType();
 		final Object[] parameters = ctx.getParameters();
 		logger = LoggerFactory.getLogger(method.getDeclaringClass());
-		level = method.getAnnotation(Tracing.class).level();
+		Tracing annotation = method.getAnnotation(Tracing.class);
+		if (annotation != null)
+			level = annotation.level();
+		else
+			level = Level.DEBUG;
 
 		log("Method entry: {}({})", methodName, parameters);
 
 		final Object result = ctx.proceed();
 
-		if (returnType == Void.class) {
+		if (returnType.equals(Void.TYPE)) {
 			log("Method exit: {}({})", methodName, parameters);
 		} else {
 			log("Method exit: {}({}) => {}", methodName, parameters, result);

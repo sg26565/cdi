@@ -7,6 +7,7 @@ import org.jboss.weld.environment.se.events.ContainerInitialized;
 import org.slf4j.Logger;
 
 import com.bayerbbs.mapper.Mapper;
+import com.bayerbbs.tracing.Tracing;
 
 public class WeldSEObserver {
 	@Inject
@@ -30,6 +31,7 @@ public class WeldSEObserver {
 	 * @see org.jboss.weld.environment.se.StartMain
 	 * @param event
 	 */
+	@Tracing
 	public void run(@Observes final ContainerInitialized event) {
 		logger.info("Hello Weld!");
 

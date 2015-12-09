@@ -1,8 +1,12 @@
 package com.bayerbbs.mapper.cdi;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import javax.inject.Inject;
+import javax.interceptor.Interceptors;
 
 import org.jglue.cdiunit.AdditionalClasses;
 import org.jglue.cdiunit.CdiRunner;
@@ -10,10 +14,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.bayerbbs.mapper.Mapper;
+import com.bayerbbs.tracing.TracingInterceptor;
 
 @RunWith(CdiRunner.class)
 @AdditionalClasses({ StringToBooleanMapper.class, StringToDoubleMapper.class, StringToFloatMapper.class,
 		StringToIntMapper.class })
+@Interceptors(TracingInterceptor.class)
 public class MapperTest {
 	@Inject
 	private Mapper<String, Integer> intMapper;

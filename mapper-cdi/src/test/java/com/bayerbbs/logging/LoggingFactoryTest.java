@@ -20,5 +20,6 @@ public class LoggingFactoryTest {
 	public void test() {
 		assertNotNull(logger);
 		assertEquals(LoggingFactoryTest.class.getName(),logger.getName());
+		logger.info("test successful");
 	}
 }
