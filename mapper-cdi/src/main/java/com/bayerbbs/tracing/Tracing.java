@@ -22,8 +22,8 @@ public @interface Tracing {
 	 * Set the logging level for the tracing messages.
 	 *
 	 * @see Level
-	 * @return Defaults to {@link Level#DEBUG}.
+	 * @return Defaults to {@link Level#TRACE}.
 	 */
 	@Nonbinding
-	Level level() default Level.DEBUG;
+	Level level() default Level.TRACE;
 }

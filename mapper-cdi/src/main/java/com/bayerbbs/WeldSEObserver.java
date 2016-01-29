@@ -1,6 +1,5 @@
 package com.bayerbbs;
 
-import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
 import org.jboss.weld.environment.se.events.ContainerInitialized;
@@ -32,7 +31,7 @@ public class WeldSEObserver {
 	 * @param event
 	 */
 	@Tracing
-	public void run(@Observes final ContainerInitialized event) {
+	public void run(final ContainerInitialized event) {
 		logger.info("Hello Weld!");
 
 		final String s = "3.1415";

@@ -39,29 +39,48 @@ public class TracingInterceptor {
 		}
 	}
 
+	private boolean isTracingEnabled() {
+		switch (level) {
+		case DEBUG:
+			return logger.isDebugEnabled();
+		case ERROR:
+			return logger.isErrorEnabled();
+		case INFO:
+			return logger.isInfoEnabled();
+		case TRACE:
+			return logger.isTraceEnabled();
+		case WARN:
+			return logger.isWarnEnabled();
+		default:
+			return false;
+		}
+	}
+
 	@AroundInvoke
 	public Object traceMethodCall(final InvocationContext ctx) throws Exception {
 		final Method method = ctx.getMethod();
-		final String methodName = method.getName();
-		final Class<?> returnType = method.getReturnType();
-		final Object[] parameters = ctx.getParameters();
-		logger = LoggerFactory.getLogger(method.getDeclaringClass());
 		final Tracing annotation = method.getAnnotation(Tracing.class);
-		if (annotation != null) {
-			level = annotation.level();
+		logger = LoggerFactory.getLogger(method.getDeclaringClass());
+		level = annotation == null ? Level.TRACE : annotation.level();
+		final Object result;
+
+		if (isTracingEnabled()) {
+			final String methodName = method.getName();
+			final Object[] parameters = ctx.getParameters();
+			final Class<?> returnType = method.getReturnType();
+			String returnTypeName = returnType.getTypeName();
+
+			log("Method entry: {} {}({})", returnTypeName, methodName, parameters);
+
+			result = ctx.proceed();
+
+			if (returnType.equals(Void.TYPE)) {
+				log("Method exit: void {}({})", methodName, parameters);
+			} else {
+				log("Method exit: {} {}({}) => {}", returnTypeName, methodName, parameters, result);
+			}
 		} else {
-			// @Interceptors annotation was used instead of @Tracing meta annotation
-			level = Level.DEBUG;
-		}
-
-		log("Method entry: {}({})", methodName, parameters);
-
-		final Object result = ctx.proceed();
-
-		if (returnType.equals(Void.TYPE)) {
-			log("Method exit: {}({})", methodName, parameters);
-		} else {
-			log("Method exit: {}({}) => {}", methodName, parameters, result);
+			result = ctx.proceed();
 		}
 
 		return result;

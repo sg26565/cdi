@@ -6,20 +6,14 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import javax.inject.Inject;
-import javax.interceptor.Interceptors;
 
-import org.jglue.cdiunit.AdditionalClasses;
-import org.jglue.cdiunit.CdiRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.bayerbbs.mapper.Mapper;
-import com.bayerbbs.tracing.TracingInterceptor;
+import com.bayerbbs.testing.CdiTestRunner;
 
-@RunWith(CdiRunner.class)
-@AdditionalClasses({ StringToBooleanMapper.class, StringToDoubleMapper.class, StringToFloatMapper.class,
-		StringToIntMapper.class })
-@Interceptors(TracingInterceptor.class)
+@RunWith(CdiTestRunner.class)
 public class MapperTest {
 	@Inject
 	private Mapper<String, Integer> intMapper;
