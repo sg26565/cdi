@@ -15,11 +15,14 @@ public class Mappers {
 	public static final Function<String, Double> STRING_TO_DOUBLE = s -> Double.valueOf(s.trim());
 
 	@Produces
-	public static final Function<String, Short> STRING_TO_SHORT = s -> Short.valueOf(s.trim());
-
-	@Produces
 	public static final Function<String, Float> STRING_TO_FLOAT = s -> Float.valueOf(s.trim());
 
 	@Produces
 	public static final Function<String, Integer> STRING_TO_INTEGER = s -> Float.valueOf(s.trim()).intValue();
+
+	@Produces
+	public static final Function<String, Long> STRING_TO_LONG = s -> Double.valueOf(s.trim()).longValue();
+
+	@Produces
+	public static final Function<String, Short> STRING_TO_SHORT = s -> Short.valueOf(s.trim());
 }
