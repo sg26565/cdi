@@ -10,15 +10,18 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 
+import com.bayerbbs.AbstractProducer;
+
 @ApplicationScoped
-public class FileProducer {
+public class FileProducer extends AbstractProducer {
 	@Inject
 	private Logger logger;
 
 	@Produces
 	@Temporary
 	public File getTempFile(final InjectionPoint ip) throws IOException {
-		final String fileName = ip.getAnnotated().getAnnotation(Temporary.class).name();
+		final Temporary annotation = getAnnotation(ip, Temporary.class);
+		final String fileName = annotation.name();
 		final File file;
 
 		if (fileName != null && fileName.length() > 1) {

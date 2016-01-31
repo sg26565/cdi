@@ -9,15 +9,18 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 
+import com.bayerbbs.AbstractProducer;
+
 @ApplicationScoped
-public class EnvProducer {
+public class EnvProducer extends AbstractProducer {
 	@Inject
 	private Logger logger;
 
 	@Produces
 	@Environment("")
 	public String getEnvironment(final InjectionPoint ip) {
-		final Environment annotation = ip.getAnnotated().getAnnotation(Environment.class);
+		final Environment annotation = getAnnotation(ip, Environment.class);
+
 		final String envName = annotation.value();
 		final String result = System.getenv(envName);
 		logger.trace("{} = {}", envName, result);
@@ -32,7 +35,8 @@ public class EnvProducer {
 	@Produces
 	@SystemProperty("")
 	public String getSystemProperty(final InjectionPoint ip) {
-		final SystemProperty annotation = ip.getAnnotated().getAnnotation(SystemProperty.class);
+		final SystemProperty annotation = getAnnotation(ip, SystemProperty.class);
+
 		final String propertyName = annotation.value();
 		final String result = System.getProperty(propertyName);
 		logger.trace("{} = {}", propertyName, result);
