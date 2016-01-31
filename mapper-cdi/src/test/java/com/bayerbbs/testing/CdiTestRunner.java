@@ -9,7 +9,15 @@ public class CdiTestRunner extends BlockJUnit4ClassRunner {
 	private static final Weld WELD = new Weld(CdiTestRunner.class.getName());
 	private static final WeldContainer container = WELD.initialize();
 
-	public CdiTestRunner(Class<?> klass) throws InitializationError {
+	public static WeldContainer getContainer() {
+		return container;
+	}
+
+	public static Weld getWeld() {
+		return WELD;
+	}
+
+	public CdiTestRunner(final Class<?> klass) throws InitializationError {
 		super(klass);
 		classRules().add(new CdiTestRule());
 	}
