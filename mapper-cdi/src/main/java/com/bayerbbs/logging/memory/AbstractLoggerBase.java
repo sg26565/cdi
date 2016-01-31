@@ -1,4 +1,4 @@
-package com.bayerbbs.logging;
+package com.bayerbbs.logging.memory;
 
 import org.slf4j.helpers.FormattingTuple;
 import org.slf4j.helpers.MarkerIgnoringBase;

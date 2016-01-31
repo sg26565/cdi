@@ -1,4 +1,4 @@
-package com.bayerbbs.logging;
+package com.bayerbbs.logging.memory;
 
 import java.util.Collection;
 import java.util.Iterator;

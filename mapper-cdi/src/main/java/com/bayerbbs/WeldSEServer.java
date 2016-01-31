@@ -1,6 +1,7 @@
 package com.bayerbbs;
 
 import java.io.File;
+import java.util.function.Function;
 
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
@@ -11,22 +12,21 @@ import org.slf4j.Logger;
 import com.bayerbbs.env.Environment;
 import com.bayerbbs.env.SystemProperty;
 import com.bayerbbs.io.Temporary;
-import com.bayerbbs.mapper.Mapper;
 import com.bayerbbs.tracing.Tracing;
 import com.bayerbbs.tracing.Tracing.Level;
 
 public class WeldSEServer {
 	@Inject
-	private Mapper<String, Integer> intMapper;
+	private Function<String, Integer> intMapper;
 
 	@Inject
-	private Mapper<String, Float> floatMapper;
+	private Function<String, Float> floatMapper;
 
 	@Inject
-	private Mapper<String, Double> doubleMapper;
+	private Function<String, Double> doubleMapper;
 
 	@Inject
-	private Mapper<String, Boolean> booleanMapper;
+	private Function<String, Boolean> booleanMapper;
 
 	@Inject
 	private Logger logger;
@@ -65,12 +65,12 @@ public class WeldSEServer {
 
 		final String s = "3.1415";
 
-		logger.info("String \"{}\" to int: {}", s, intMapper.map(s));
-		logger.info("String \"{}\" to float: {}", s, floatMapper.map(s));
-		logger.info("String \"{}\" to double: {}", s, doubleMapper.map(s));
+		logger.info("String \"{}\" to int: {}", s, intMapper.apply(s));
+		logger.info("String \"{}\" to float: {}", s, floatMapper.apply(s));
+		logger.info("String \"{}\" to double: {}", s, doubleMapper.apply(s));
 
-		logger.info("String \"{}\" to boolean: {}", "false", booleanMapper.map("false"));
-		logger.info("String \"{}\" to boolean: {}", "0", booleanMapper.map("0"));
-		logger.info("String \"{}\" to boolean: {}", "No", booleanMapper.map("No"));
+		logger.info("String \"{}\" to boolean: {}", "false", booleanMapper.apply("false"));
+		logger.info("String \"{}\" to boolean: {}", "0", booleanMapper.apply("0"));
+		logger.info("String \"{}\" to boolean: {}", "No", booleanMapper.apply("No"));
 	}
 }

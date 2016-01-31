@@ -5,46 +5,47 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.function.Function;
+
 import javax.inject.Inject;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.bayerbbs.mapper.Mapper;
 import com.bayerbbs.testing.CdiTestRunner;
 
 @RunWith(CdiTestRunner.class)
 public class MapperTest {
 	@Inject
-	private Mapper<String, Integer> intMapper;
+	private Function<String, Integer> intMapper;
 
 	@Inject
-	private Mapper<String, Float> floatMapper;
+	private Function<String, Float> floatMapper;
 
 	@Inject
-	private Mapper<String, Double> doubleMapper;
+	private Function<String, Double> doubleMapper;
 
 	@Inject
-	private Mapper<String, Boolean> booleanMapper;
+	private Function<String, Boolean> booleanMapper;
 
 	@Test
 	public void test() {
-		String s = "3.14";
+		final String s = "3.14";
 
 		assertNotNull(intMapper);
-		assertEquals(3, (int) intMapper.map(s));
+		assertEquals(3, (int) intMapper.apply(s));
 
 		assertNotNull(floatMapper);
-		assertEquals(3.14f, floatMapper.map(s), 0f);
+		assertEquals(3.14f, floatMapper.apply(s), 0f);
 
 		assertNotNull(doubleMapper);
-		assertEquals(3.14d, doubleMapper.map(s), 0d);
+		assertEquals(3.14d, doubleMapper.apply(s), 0d);
 
 		assertNotNull(booleanMapper);
-		assertFalse(booleanMapper.map("False"));
-		assertFalse(booleanMapper.map("false"));
-		assertFalse(booleanMapper.map("herbert"));
-		assertTrue(booleanMapper.map("True"));
-		assertTrue(booleanMapper.map("true"));
+		assertFalse(booleanMapper.apply("False"));
+		assertFalse(booleanMapper.apply("false"));
+		assertFalse(booleanMapper.apply("herbert"));
+		assertTrue(booleanMapper.apply("True"));
+		assertTrue(booleanMapper.apply("true"));
 	}
 }

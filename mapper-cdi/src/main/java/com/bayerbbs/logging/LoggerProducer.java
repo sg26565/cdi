@@ -7,11 +7,21 @@ import javax.enterprise.inject.Alternative;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 
+import org.apache.logging.log4j.LogManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class LoggingFactory {
+import com.bayerbbs.logging.memory.MemoryLogger;
+
+public class LoggerProducer {
 	private final Map<Class<?>, Logger> loggers = new HashMap<Class<?>, Logger>();
+
+	@Produces
+	public org.apache.logging.log4j.Logger getLog4JLogger(final InjectionPoint ip) {
+		final String loggerName = ip.getMember().getDeclaringClass().getName();
+		LogManager.getLogger(LoggerProducer.class).trace("logger = {}", loggerName);
+		return LogManager.getLogger(loggerName);
+	}
 
 	@Produces
 	@Alternative
@@ -28,7 +38,9 @@ public class LoggingFactory {
 	}
 
 	@Produces
-	public Logger getStandardLogger(final InjectionPoint ip) {
-		return LoggerFactory.getLogger(ip.getMember().getDeclaringClass());
+	public Logger getSLF4JLogger(final InjectionPoint ip) {
+		final String loggerName = ip.getMember().getDeclaringClass().getName();
+		LoggerFactory.getLogger(LoggerProducer.class).trace("logger = {}", loggerName);
+		return LoggerFactory.getLogger(loggerName);
 	}
 }

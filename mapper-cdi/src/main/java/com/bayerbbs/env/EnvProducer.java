@@ -15,28 +15,30 @@ public class EnvProducer {
 	private Logger logger;
 
 	@Produces
-	@SystemProperty("")
-	public String getSystemProperty(final InjectionPoint ip) {
-		final String propertyName = ip.getAnnotated().getAnnotation(SystemProperty.class).value();
-		final String result = System.getProperty(propertyName);
-		logger.trace("{} = {}", propertyName, result);
+	@Environment("")
+	public String getEnvironment(final InjectionPoint ip) {
+		final Environment annotation = ip.getAnnotated().getAnnotation(Environment.class);
+		final String envName = annotation.value();
+		final String result = System.getenv(envName);
+		logger.trace("{} = {}", envName, result);
 
-		if (result == null) {
-			throw new NoSuchElementException(propertyName);
+		if (result == null && annotation.strict()) {
+			throw new NoSuchElementException(envName);
 		}
 
 		return result;
 	}
 
 	@Produces
-	@Environment("")
-	public String getEnvironment(final InjectionPoint ip) {
-		final String envName = ip.getAnnotated().getAnnotation(Environment.class).value();
-		final String result = System.getenv(envName);
-		logger.trace("{} = {}", envName, result);
+	@SystemProperty("")
+	public String getSystemProperty(final InjectionPoint ip) {
+		final SystemProperty annotation = ip.getAnnotated().getAnnotation(SystemProperty.class);
+		final String propertyName = annotation.value();
+		final String result = System.getProperty(propertyName);
+		logger.trace("{} = {}", propertyName, result);
 
-		if (result == null) {
-			throw new NoSuchElementException(envName);
+		if (result == null && annotation.strict()) {
+			throw new NoSuchElementException(propertyName);
 		}
 
 		return result;

@@ -1,8 +1,8 @@
-package com.bayerbbs.logging;
+package com.bayerbbs.logging.memory;
 
 import org.slf4j.helpers.FormattingTuple;
 
-import com.bayerbbs.logging.AbstractLoggerBase.Level;
+import com.bayerbbs.logging.memory.AbstractLoggerBase.Level;
 
 public class LogEntry {
 	private final Level level;
