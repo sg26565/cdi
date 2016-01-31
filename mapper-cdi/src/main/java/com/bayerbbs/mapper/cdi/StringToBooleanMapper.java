@@ -6,7 +6,7 @@ import com.bayerbbs.mapper.Mapper;
 import com.bayerbbs.tracing.Tracing;
 
 @ApplicationScoped
-public class StringToBooleanMapper extends Mapper<String, Boolean> {
+class StringToBooleanMapper extends Mapper<String, Boolean> {
 	@Override
 	@Tracing
 	public Boolean map(final String from) {

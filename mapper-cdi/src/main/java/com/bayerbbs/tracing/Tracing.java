@@ -15,15 +15,9 @@ import javax.interceptor.InterceptorBinding;
 @Retention(RUNTIME)
 public @interface Tracing {
 	public enum Level {
-		DEBUG, ERROR, INFO, TRACE, WARN
+		TRACE, DEBUG, INFO, WARN, ERROR
 	}
 
-	/**
-	 * Set the logging level for the tracing messages.
-	 *
-	 * @see Level
-	 * @return Defaults to {@link Level#TRACE}.
-	 */
 	@Nonbinding
-	Level level() default Level.TRACE;
+	public Level level() default Level.TRACE;
 }

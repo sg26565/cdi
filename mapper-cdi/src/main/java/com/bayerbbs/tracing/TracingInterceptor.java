@@ -14,32 +14,27 @@ import com.bayerbbs.tracing.Tracing.Level;
 @Tracing
 @Interceptor
 public class TracingInterceptor {
-	private Logger logger;
-	private Level level;
-
-	private void log(final String format, final Object... args) {
+	private void log(final Logger logger, final Level level, final String message, final Object... args) {
 		switch (level) {
 		case DEBUG:
-			logger.debug(format, args);
+			logger.debug(message, args);
 			break;
 		case ERROR:
-			logger.error(format, args);
+			logger.error(message, args);
 			break;
 		case INFO:
-			logger.info(format, args);
+			logger.info(message, args);
 			break;
 		case TRACE:
-			logger.trace(format, args);
+			logger.trace(message, args);
 			break;
 		case WARN:
-			logger.warn(format, args);
-			break;
-		default:
+			logger.warn(message, args);
 			break;
 		}
 	}
 
-	private boolean isTracingEnabled() {
+	private boolean isEnabled(final Logger logger, final Level level) {
 		switch (level) {
 		case DEBUG:
 			return logger.isDebugEnabled();
@@ -59,25 +54,25 @@ public class TracingInterceptor {
 	@AroundInvoke
 	public Object traceMethodCall(final InvocationContext ctx) throws Exception {
 		final Method method = ctx.getMethod();
+		final Logger logger = LoggerFactory.getLogger(method.getDeclaringClass());
 		final Tracing annotation = method.getAnnotation(Tracing.class);
-		logger = LoggerFactory.getLogger(method.getDeclaringClass());
-		level = annotation == null ? Level.TRACE : annotation.level();
+		final Level level = annotation == null ? Level.TRACE : annotation.level();
+
 		final Object result;
 
-		if (isTracingEnabled()) {
+		if (isEnabled(logger, level)) {
 			final String methodName = method.getName();
 			final Object[] parameters = ctx.getParameters();
 			final Class<?> returnType = method.getReturnType();
-			String returnTypeName = returnType.getTypeName();
 
-			log("Method entry: {} {}({})", returnTypeName, methodName, parameters);
+			log(logger, level, "{}({}) entry", methodName, parameters);
 
 			result = ctx.proceed();
 
 			if (returnType.equals(Void.TYPE)) {
-				log("Method exit: void {}({})", methodName, parameters);
+				log(logger, level, "{}({}) exit", methodName, parameters);
 			} else {
-				log("Method exit: {} {}({}) => {}", returnTypeName, methodName, parameters, result);
+				log(logger, level, "{}({}) result: {}", methodName, parameters, result);
 			}
 		} else {
 			result = ctx.proceed();
