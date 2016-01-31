@@ -1,4 +1,4 @@
-package com.bayerbbs.mapper.cdi;
+package com.bayerbbs.mapper;
 
 import java.util.function.Function;
 

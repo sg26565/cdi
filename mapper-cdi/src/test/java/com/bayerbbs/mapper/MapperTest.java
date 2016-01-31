@@ -1,4 +1,4 @@
-package com.bayerbbs.mapper.cdi;
+package com.bayerbbs.mapper;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
