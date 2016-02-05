@@ -1,15 +1,69 @@
-package com.bayerbbs.tracing;
+package de.treichels.cdi.tracing;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import java.util.Queue;
+
+import javax.inject.Inject;
+
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.LogEvent;
+import org.apache.logging.log4j.core.layout.PatternLayout;
+import org.apache.logging.log4j.spi.LoggerContextFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.bayerbbs.testing.CdiTestRunner;
-import com.bayerbbs.tracing.Tracing.Level;
+import de.treichels.cdi.logging.MemoryLoggerFactory;
+import de.treichels.cdi.testing.CdiTestRunner;
 
 @RunWith(CdiTestRunner.class)
+@Tracing
 public class TracingTest {
+	@Inject
+	private Foo foo;
+
 	@Test
-	@Tracing(level=Level.INFO)
-	public void test() {
+	public void testTracing() {
+		final LoggerContextFactory factory = LogManager.getFactory();
+		foo.foo(7);
+
+		try {
+			LogManager.setFactory(MemoryLoggerFactory.getInstance());
+
+			final int result = foo.foo(7);
+			assertEquals(105, result);
+		} finally {
+			LogManager.setFactory(factory);
+		}
+
+		final Queue<LogEvent> events = MemoryLoggerFactory.getLogEvents();
+		assertNotNull(events);
+		assertEquals(4, events.size());
+
+		final String pattern = "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n";
+		final PatternLayout layout = PatternLayout.newBuilder().withPattern(pattern).build();
+		events.forEach(e -> layout.toSerializable(e));
+
+		LogEvent event = events.remove();
+		assertEquals(Level.TRACE, event.getLevel());
+		assertEquals(Foo.class.getName(), event.getLoggerName());
+		assertEquals("method entry foo(7)", event.getMessage().getFormattedMessage());
+
+		event = events.remove();
+		assertEquals(Level.TRACE, event.getLevel());
+		assertEquals(Bar.class.getName(), event.getLoggerName());
+		assertEquals("method entry bar(21)", event.getMessage().getFormattedMessage());
+
+		event = events.remove();
+		assertEquals(Level.TRACE, event.getLevel());
+		assertEquals(Bar.class.getName(), event.getLoggerName());
+		assertEquals("method result bar(21): 105", event.getMessage().getFormattedMessage());
+
+		event = events.remove();
+		assertEquals(Level.TRACE, event.getLevel());
+		assertEquals(Foo.class.getName(), event.getLoggerName());
+		assertEquals("method result foo(7): 105", event.getMessage().getFormattedMessage());
 	}
 }

@@ -1,37 +1,77 @@
-package com.bayerbbs.logging;
+package de.treichels.cdi.logging;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Queue;
 
 import javax.inject.Inject;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.Marker;
+import org.apache.logging.log4j.MarkerManager;
+import org.apache.logging.log4j.core.LogEvent;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
 
-import com.bayerbbs.logging.memory.AbstractLoggerBase.Level;
-import com.bayerbbs.logging.memory.LogEntry;
-import com.bayerbbs.logging.memory.MemoryLogger;
-import com.bayerbbs.testing.CdiTestRunner;
+import de.treichels.cdi.testing.CdiTestRunner;
+import de.treichels.cdi.tracing.Tracing;
 
 @RunWith(CdiTestRunner.class)
+@Tracing
 public class LoggerProducerTest {
 	@Inject
-	Logger logger;
+	@Memory
+	private Logger memoryLogger;
+
+	@Inject
+	private Logger normalLogger;
 
 	@Test
-	public void test() {
-		assertNotNull(logger);
-		assertEquals(MemoryLogger.class, logger.getClass());
-		assertEquals(LoggerProducerTest.class.getName(), logger.getName());
+	public void testMemoryLogger() throws InterruptedException {
+		assertNotNull(memoryLogger);
+		assertEquals(MemoryLogger.class, memoryLogger.getClass());
+		assertEquals(LoggerProducerTest.class.getName(), memoryLogger.getName());
 
-		logger.info("test message");
+		final String message = "test message";
+		final Marker marker = MarkerManager.getMarker("test");
+		final Throwable t = new RuntimeException("42");
 
-		final MemoryLogger memoryLogger = (MemoryLogger) logger;
-		assertEquals(1, memoryLogger.size());
-		final LogEntry entry = memoryLogger.remove();
+		final long ts1 = System.currentTimeMillis();
+		Thread.sleep(1);
+		memoryLogger.info(marker, message, t);
+		memoryLogger.debug("test {} {}", "one", "two");
+		Thread.sleep(1);
+		final long ts2 = System.currentTimeMillis();
 
-		assertEquals(Level.INFO, entry.getLevel());
-		assertEquals("test message", entry.getMessage().getMessage());
+		final Queue<LogEvent> events = MemoryLoggerFactory.getLogEvents();
+		assertEquals(2, events.size());
+
+		final LogEvent event1 = events.remove();
+		assertEquals(Level.INFO, event1.getLevel());
+		assertEquals(marker, event1.getMarker());
+		assertEquals(message, event1.getMessage().getFormattedMessage());
+		assertEquals(t, event1.getThrown());
+		assertTrue(ts1 < event1.getTimeMillis());
+		assertTrue(ts2 > event1.getTimeMillis());
+
+		final LogEvent event2 = events.remove();
+		assertEquals(Level.DEBUG, event2.getLevel());
+		assertNull(event2.getMarker());
+		assertEquals("test one two", event2.getMessage().getFormattedMessage());
+		assertNull(event2.getThrown());
+		assertTrue(ts1 < event2.getTimeMillis());
+		assertTrue(ts2 > event2.getTimeMillis());
+	}
+
+	@Test
+	public void testNomalLogger() {
+		assertNotNull(normalLogger);
+		assertNotEquals(MemoryLogger.class, normalLogger.getClass());
+		assertEquals(LoggerProducerTest.class.getName(), normalLogger.getName());
 	}
 }

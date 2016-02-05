@@ -1,4 +1,4 @@
-package com.bayerbbs.io;
+package de.treichels.cdi.io;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -12,9 +12,11 @@ import javax.inject.Inject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.bayerbbs.testing.CdiTestRunner;
+import de.treichels.cdi.testing.CdiTestRunner;
+import de.treichels.cdi.tracing.Tracing;
 
 @RunWith(CdiTestRunner.class)
+@Tracing
 public class FileProducerTest {
 	@Inject
 	@Temporary
@@ -25,14 +27,17 @@ public class FileProducerTest {
 	private File f2;
 
 	@Test
-	public void test() {
+	public void testFile1() {
 		assertNotNull(f1);
 		assertTrue(f1.exists());
 		assertFalse(f1.isDirectory());
 		assertEquals(0, f1.length());
 		assertTrue(f1.getName().startsWith(FileProducerTest.class.getSimpleName()));
 		assertTrue(f1.getName().endsWith(".tmp"));
+	}
 
+	@Test
+	public void testFile2() {
 		assertNotNull(f2);
 		assertTrue(f2.exists());
 		assertFalse(f2.isDirectory());

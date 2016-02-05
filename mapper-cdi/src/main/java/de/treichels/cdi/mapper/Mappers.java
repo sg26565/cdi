@@ -1,4 +1,4 @@
-package com.bayerbbs.mapper;
+package de.treichels.cdi.mapper;
 
 import java.util.function.Function;
 

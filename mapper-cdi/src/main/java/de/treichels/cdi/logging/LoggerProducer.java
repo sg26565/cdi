@@ -1,46 +1,27 @@
-package com.bayerbbs.logging;
+package de.treichels.cdi.logging;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.enterprise.inject.Alternative;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.bayerbbs.logging.memory.MemoryLogger;
+import org.apache.logging.log4j.Logger;
 
 public class LoggerProducer {
-	private final Map<Class<?>, Logger> loggers = new HashMap<Class<?>, Logger>();
+	private final Logger logger = LogManager.getLogger();
 
 	@Produces
-	public org.apache.logging.log4j.Logger getLog4JLogger(final InjectionPoint ip) {
-		final String loggerName = ip.getMember().getDeclaringClass().getName();
-		LogManager.getLogger(LoggerProducer.class).trace("logger = {}", loggerName);
-		return LogManager.getLogger(loggerName);
+	public Logger getLog4JLogger(final InjectionPoint ip) {
+		final Class<?> declaringClass = ip.getMember().getDeclaringClass();
+		logger.printf(Level.TRACE, "injecting log4j logger into %s.%s", declaringClass.getName(), ip.getMember().getName());
+		return LogManager.getLogger(declaringClass);
 	}
 
 	@Produces
-	@Alternative
+	@Memory
 	public Logger getMemoryLogger(final InjectionPoint ip) {
-		final Class<?> clazz = ip.getMember().getDeclaringClass();
-		Logger result = loggers.get(clazz);
-
-		if (result == null) {
-			result = new MemoryLogger(clazz);
-			loggers.put(clazz, result);
-		}
-
-		return result;
-	}
-
-	@Produces
-	public Logger getSLF4JLogger(final InjectionPoint ip) {
-		final String loggerName = ip.getMember().getDeclaringClass().getName();
-		LoggerFactory.getLogger(LoggerProducer.class).trace("logger = {}", loggerName);
-		return LoggerFactory.getLogger(loggerName);
+		final Class<?> declaringClass = ip.getMember().getDeclaringClass();
+		logger.printf(Level.TRACE, "injecting memory logger into %s.%s", declaringClass.getName(), ip.getMember().getName());
+		return MemoryLoggerFactory.getInstance().getLogger(declaringClass.getName());
 	}
 }

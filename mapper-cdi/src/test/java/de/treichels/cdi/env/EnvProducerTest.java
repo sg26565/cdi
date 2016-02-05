@@ -1,4 +1,4 @@
-package com.bayerbbs.env;
+package de.treichels.cdi.env;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -16,9 +16,11 @@ import org.jboss.weld.environment.se.WeldContainer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.bayerbbs.testing.CdiTestRunner;
+import de.treichels.cdi.testing.CdiTestRunner;
+import de.treichels.cdi.tracing.Tracing;
 
 @RunWith(CdiTestRunner.class)
+@Tracing
 public class EnvProducerTest {
 	private static class EnvironmentLiteral extends AnnotationLiteral<Environment> implements Environment {
 		private static final long serialVersionUID = 1L;

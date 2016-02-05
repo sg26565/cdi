@@ -1,4 +1,4 @@
-package com.bayerbbs.env;
+package de.treichels.cdi.env;
 
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;

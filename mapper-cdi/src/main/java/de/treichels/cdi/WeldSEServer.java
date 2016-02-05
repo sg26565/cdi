@@ -1,4 +1,4 @@
-package com.bayerbbs;
+package de.treichels.cdi;
 
 import java.io.File;
 import java.util.function.Function;
@@ -6,15 +6,15 @@ import java.util.function.Function;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
+import org.apache.logging.log4j.Logger;
 import org.jboss.weld.environment.se.events.ContainerInitialized;
-import org.slf4j.Logger;
 
-import com.bayerbbs.env.Environment;
-import com.bayerbbs.env.SystemProperty;
-import com.bayerbbs.io.Temporary;
-import com.bayerbbs.tracing.Tracing;
-import com.bayerbbs.tracing.Tracing.Level;
+import de.treichels.cdi.env.Environment;
+import de.treichels.cdi.env.SystemProperty;
+import de.treichels.cdi.io.Temporary;
+import de.treichels.cdi.tracing.Tracing;
 
+@Tracing
 public class WeldSEServer {
 	@Inject
 	private Function<String, Integer> intMapper;
@@ -53,7 +53,6 @@ public class WeldSEServer {
 	 * @see org.jboss.weld.environment.se.StartMain
 	 * @param event
 	 */
-	@Tracing(level = Level.INFO)
 	public void run(@Observes final ContainerInitialized event) {
 		logger.info("Hello Weld!");
 

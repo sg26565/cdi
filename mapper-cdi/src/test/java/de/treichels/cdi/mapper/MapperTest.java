@@ -1,4 +1,4 @@
-package com.bayerbbs.mapper;
+package de.treichels.cdi.mapper;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -12,9 +12,11 @@ import javax.inject.Inject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.bayerbbs.testing.CdiTestRunner;
+import de.treichels.cdi.testing.CdiTestRunner;
+import de.treichels.cdi.tracing.Tracing;
 
 @RunWith(CdiTestRunner.class)
+@Tracing
 public class MapperTest {
 	@Inject
 	private Function<String, Integer> intMapper;
@@ -28,24 +30,33 @@ public class MapperTest {
 	@Inject
 	private Function<String, Boolean> booleanMapper;
 
+	private final String string = "3.14";
+
 	@Test
-	public void test() {
-		final String s = "3.14";
-
-		assertNotNull(intMapper);
-		assertEquals(3, (int) intMapper.apply(s));
-
-		assertNotNull(floatMapper);
-		assertEquals(3.14f, floatMapper.apply(s), 0f);
-
-		assertNotNull(doubleMapper);
-		assertEquals(3.14d, doubleMapper.apply(s), 0d);
-
+	public void testBooleanMapper() {
 		assertNotNull(booleanMapper);
 		assertFalse(booleanMapper.apply("False"));
 		assertFalse(booleanMapper.apply("false"));
 		assertFalse(booleanMapper.apply("herbert"));
 		assertTrue(booleanMapper.apply("True"));
 		assertTrue(booleanMapper.apply("true"));
+	}
+
+	@Test
+	public void testDoupleMapper() {
+		assertNotNull(doubleMapper);
+		assertEquals(3.14d, doubleMapper.apply(string), 0d);
+	}
+
+	@Test
+	public void testFloatMapper() {
+		assertNotNull(floatMapper);
+		assertEquals(3.14f, floatMapper.apply(string), 0f);
+	}
+
+	@Test
+	public void testIntMapper() {
+		assertNotNull(intMapper);
+		assertEquals(3, (int) intMapper.apply(string));
 	}
 }

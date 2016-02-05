@@ -1,4 +1,4 @@
-package com.bayerbbs.io;
+package de.treichels.cdi.io;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,9 +8,10 @@ import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.inject.Inject;
 
-import org.slf4j.Logger;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.Logger;
 
-import com.bayerbbs.AbstractProducer;
+import de.treichels.cdi.AbstractProducer;
 
 @ApplicationScoped
 public class FileProducer extends AbstractProducer {
@@ -30,7 +31,9 @@ public class FileProducer extends AbstractProducer {
 			file = File.createTempFile(ip.getMember().getDeclaringClass().getSimpleName(), null);
 		}
 
-		logger.trace("fileNAme = {}", file);
+		if (logger.isTraceEnabled()) {
+			logger.printf(Level.TRACE, "injecting file \"%s\" into %s.%s", file, ip.getMember().getDeclaringClass().getName(), ip.getMember().getName());
+		}
 
 		return file;
 	}

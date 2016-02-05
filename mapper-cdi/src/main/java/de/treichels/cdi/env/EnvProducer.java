@@ -1,5 +1,6 @@
-package com.bayerbbs.env;
+package de.treichels.cdi.env;
 
+import java.lang.reflect.Member;
 import java.util.NoSuchElementException;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -7,9 +8,10 @@ import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.inject.Inject;
 
-import org.slf4j.Logger;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.Logger;
 
-import com.bayerbbs.AbstractProducer;
+import de.treichels.cdi.AbstractProducer;
 
 @ApplicationScoped
 public class EnvProducer extends AbstractProducer {
@@ -23,7 +25,15 @@ public class EnvProducer extends AbstractProducer {
 
 		final String envName = annotation.value();
 		final String result = System.getenv(envName);
-		logger.trace("{} = {}", envName, result);
+
+		if (logger.isTraceEnabled()) {
+			final Member member = ip.getMember();
+			if (member == null) {
+				logger.printf(Level.TRACE, "injecting Env(%s) = \"%s\"", envName, result);
+			} else {
+				logger.printf(Level.TRACE, "injecting Env(%s) = \"%s\" into %s.%s", envName, result, member.getDeclaringClass().getName(), member.getName());
+			}
+		}
 
 		if (result == null && annotation.strict()) {
 			throw new NoSuchElementException(envName);
@@ -39,7 +49,16 @@ public class EnvProducer extends AbstractProducer {
 
 		final String propertyName = annotation.value();
 		final String result = System.getProperty(propertyName);
-		logger.trace("{} = {}", propertyName, result);
+
+		if (logger.isTraceEnabled()) {
+			final Member member = ip.getMember();
+			if (member == null) {
+				logger.printf(Level.TRACE, "injecting Property(%s) = \"%s\"", propertyName, result);
+			} else {
+				logger.printf(Level.TRACE, "injecting Property(%s) = \"%s\" into %s.%s", propertyName, result, member.getDeclaringClass().getName(),
+				        member.getName());
+			}
+		}
 
 		if (result == null && annotation.strict()) {
 			throw new NoSuchElementException(propertyName);
