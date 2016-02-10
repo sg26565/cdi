@@ -9,6 +9,7 @@ import javax.inject.Inject;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.layout.PatternLayout;
 import org.apache.logging.log4j.spi.LoggerContextFactory;
@@ -22,13 +23,17 @@ import de.treichels.cdi.testing.CdiTestRunner;
 @Tracing
 public class TracingTest {
 	@Inject
+	private Logger logger;
+
+	@Inject
 	private Foo foo;
 
 	@Test
 	public void testTracing() {
-		final LoggerContextFactory factory = LogManager.getFactory();
+		logger.debug("log4j logger");
 		foo.foo(7);
 
+		final LoggerContextFactory factory = LogManager.getFactory();
 		try {
 			LogManager.setFactory(MemoryLoggerFactory.getInstance());
 
@@ -44,7 +49,8 @@ public class TracingTest {
 
 		final String pattern = "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n";
 		final PatternLayout layout = PatternLayout.newBuilder().withPattern(pattern).build();
-		events.forEach(e -> layout.toSerializable(e));
+		logger.debug("memory logger");
+		events.stream().map(e -> layout.toSerializable(e)).forEach(System.out::print);
 
 		LogEvent event = events.remove();
 		assertEquals(Level.TRACE, event.getLevel());
