@@ -25,7 +25,7 @@ import de.treichels.cdi.tracing.Tracing;
 @Tracing
 public class LoggerProducerTest {
 	@Inject
-	@Memory
+	@MemoryLogger
 	private Logger memoryLogger;
 
 	@Inject
@@ -34,7 +34,7 @@ public class LoggerProducerTest {
 	@Test
 	public void testMemoryLogger() throws InterruptedException {
 		assertNotNull(memoryLogger);
-		assertEquals(MemoryLogger.class, memoryLogger.getClass());
+		assertEquals(MemoryLoggerImpl.class, memoryLogger.getClass());
 		assertEquals(LoggerProducerTest.class.getName(), memoryLogger.getName());
 
 		final String message = "test message";
@@ -71,7 +71,7 @@ public class LoggerProducerTest {
 	@Test
 	public void testNomalLogger() {
 		assertNotNull(normalLogger);
-		assertNotEquals(MemoryLogger.class, normalLogger.getClass());
+		assertNotEquals(MemoryLoggerImpl.class, normalLogger.getClass());
 		assertEquals(LoggerProducerTest.class.getName(), normalLogger.getName());
 	}
 }

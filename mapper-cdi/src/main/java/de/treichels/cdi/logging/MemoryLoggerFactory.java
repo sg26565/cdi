@@ -28,7 +28,7 @@ public class MemoryLoggerFactory implements LoggerContextFactory, LoggerContext 
 		return LOG_EVENTS;
 	}
 
-	private final Map<String, MemoryLogger> loggers = new HashMap<>();
+	private final Map<String, MemoryLoggerImpl> loggers = new HashMap<>();
 
 	@Override
 	public LoggerContext getContext(final String fqcn, final ClassLoader loader, final Object externalContext, final boolean currentContext) {
@@ -48,12 +48,12 @@ public class MemoryLoggerFactory implements LoggerContextFactory, LoggerContext 
 
 	@Override
 	public ExtendedLogger getLogger(final String name) {
-		final MemoryLogger logger;
+		final MemoryLoggerImpl logger;
 
 		if (hasLogger(name)) {
 			logger = loggers.get(name);
 		} else {
-			logger = new MemoryLogger(name);
+			logger = new MemoryLoggerImpl(name);
 			loggers.put(name, logger);
 		}
 
