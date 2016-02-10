@@ -4,6 +4,9 @@ import java.util.function.Function;
 
 import javax.enterprise.inject.Produces;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.spi.StandardLevel;
+
 public class Mappers {
 	@Produces
 	public static final Function<String, Boolean> STRING_TO_BOOLEAN = s -> Boolean.valueOf(s.trim());
@@ -25,4 +28,10 @@ public class Mappers {
 
 	@Produces
 	public static final Function<String, Short> STRING_TO_SHORT = s -> Short.valueOf(s.trim());
+
+	@Produces
+	public static final Function<Level, StandardLevel> LEVEL_TO_STANDARD_LEVEL = l -> StandardLevel.getStandardLevel(l.intLevel());
+
+	@Produces
+	public static final Function<StandardLevel, Level> STANDARD_LEVEL_TO_LEVEL = s -> Level.getLevel(s.name());
 }
