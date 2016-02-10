@@ -9,6 +9,8 @@ import java.util.function.Function;
 
 import javax.inject.Inject;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.spi.StandardLevel;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -29,6 +31,12 @@ public class MapperTest {
 
 	@Inject
 	private Function<String, Boolean> booleanMapper;
+
+	@Inject
+	private Function<Level, StandardLevel> standardLevelMapper;
+
+	@Inject
+	private Function<StandardLevel, Level> levelMapper;
 
 	private final String string = "3.14";
 
@@ -58,5 +66,29 @@ public class MapperTest {
 	public void testIntMapper() {
 		assertNotNull(intMapper);
 		assertEquals(3, (int) intMapper.apply(string));
+	}
+
+	@Test
+	public void testLevelMapper() {
+		assertEquals(Level.ALL, levelMapper.apply(StandardLevel.ALL));
+		assertEquals(Level.DEBUG, levelMapper.apply(StandardLevel.DEBUG));
+		assertEquals(Level.ERROR, levelMapper.apply(StandardLevel.ERROR));
+		assertEquals(Level.FATAL, levelMapper.apply(StandardLevel.FATAL));
+		assertEquals(Level.INFO, levelMapper.apply(StandardLevel.INFO));
+		assertEquals(Level.OFF, levelMapper.apply(StandardLevel.OFF));
+		assertEquals(Level.TRACE, levelMapper.apply(StandardLevel.TRACE));
+		assertEquals(Level.WARN, levelMapper.apply(StandardLevel.WARN));
+	}
+
+	@Test
+	public void testStandardLevelMapper() {
+		assertEquals(StandardLevel.ALL, standardLevelMapper.apply(Level.ALL));
+		assertEquals(StandardLevel.DEBUG, standardLevelMapper.apply(Level.DEBUG));
+		assertEquals(StandardLevel.ERROR, standardLevelMapper.apply(Level.ERROR));
+		assertEquals(StandardLevel.FATAL, standardLevelMapper.apply(Level.FATAL));
+		assertEquals(StandardLevel.INFO, standardLevelMapper.apply(Level.INFO));
+		assertEquals(StandardLevel.OFF, standardLevelMapper.apply(Level.OFF));
+		assertEquals(StandardLevel.TRACE, standardLevelMapper.apply(Level.TRACE));
+		assertEquals(StandardLevel.WARN, standardLevelMapper.apply(Level.WARN));
 	}
 }
