@@ -15,6 +15,7 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
 import org.apache.logging.log4j.core.LogEvent;
+import org.apache.logging.log4j.spi.StandardLevel;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -25,7 +26,7 @@ import de.treichels.cdi.tracing.Tracing;
 @Tracing
 public class LoggerProducerTest {
 	@Inject
-	@MemoryLogger
+	@MemoryLogger(level = StandardLevel.DEBUG)
 	private Logger memoryLogger;
 
 	@Inject
@@ -36,6 +37,7 @@ public class LoggerProducerTest {
 		assertNotNull(memoryLogger);
 		assertEquals(MemoryLoggerImpl.class, memoryLogger.getClass());
 		assertEquals(LoggerProducerTest.class.getName(), memoryLogger.getName());
+		assertEquals(Level.DEBUG, memoryLogger.getLevel());
 
 		final String message = "test message";
 		final Marker marker = MarkerManager.getMarker("test");
@@ -45,6 +47,7 @@ public class LoggerProducerTest {
 		Thread.sleep(1);
 		memoryLogger.info(marker, message, t);
 		memoryLogger.debug("test {} {}", "one", "two");
+		memoryLogger.trace("this will not be logged");
 		Thread.sleep(1);
 		final long ts2 = System.currentTimeMillis();
 
