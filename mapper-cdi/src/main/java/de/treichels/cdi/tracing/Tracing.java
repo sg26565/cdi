@@ -1,6 +1,7 @@
 package de.treichels.cdi.tracing;
 
 import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.PACKAGE;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
@@ -13,7 +14,7 @@ import javax.interceptor.InterceptorBinding;
 import org.apache.logging.log4j.spi.StandardLevel;
 
 @InterceptorBinding
-@Target({ METHOD, TYPE })
+@Target({ METHOD, TYPE, PACKAGE })
 @Retention(RUNTIME)
 public @interface Tracing {
 	@Nonbinding

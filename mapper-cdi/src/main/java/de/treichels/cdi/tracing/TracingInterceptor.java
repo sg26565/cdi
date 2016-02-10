@@ -3,8 +3,10 @@ package de.treichels.cdi.tracing;
 import static java.util.stream.Collectors.joining;
 
 import java.lang.reflect.Method;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
+import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
@@ -17,16 +19,28 @@ import org.apache.logging.log4j.spi.StandardLevel;
 @Tracing
 @Interceptor
 public class TracingInterceptor {
+	@Inject
+	private Function<StandardLevel, Level> mapper;
+
 	@AroundInvoke
 	public Object traceMethodCall(final InvocationContext ctx) throws Exception {
 		final Method method = ctx.getMethod();
 		final Logger logger = LogManager.getLogger(method.getDeclaringClass());
+
+		// method annotation
 		Tracing annotation = method.getAnnotation(Tracing.class);
+
 		if (annotation == null) {
+			// type annotation
 			annotation = method.getDeclaringClass().getAnnotation(Tracing.class);
 		}
-		final StandardLevel standardLevel = annotation == null ? StandardLevel.TRACE : annotation.level();
-		final Level level = Level.getLevel(standardLevel.name());
+
+		if (annotation == null) {
+			// package annotation
+			annotation = method.getDeclaringClass().getPackage().getAnnotation(Tracing.class);
+		}
+
+		final Level level = annotation == null ? Level.TRACE : mapper.apply(annotation.level());
 		final Object result;
 
 		if (logger.isEnabled(level)) {
