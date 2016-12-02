@@ -76,6 +76,11 @@ public class MemoryLoggerImpl extends AbstractLogger {
 	}
 
 	@Override
+	public boolean isEnabled(final Level level, final Marker marker, final CharSequence message, final Throwable t) {
+		return isEnabled(level);
+	}
+
+	@Override
 	public boolean isEnabled(final Level level, final Marker marker, final Message message, final Throwable t) {
 		return isEnabled(level);
 	}
@@ -96,6 +101,64 @@ public class MemoryLoggerImpl extends AbstractLogger {
 	}
 
 	@Override
+	public boolean isEnabled(final Level level, final Marker marker, final String message, final Object param) {
+		return isEnabled(level);
+	}
+
+	@Override
+	public boolean isEnabled(final Level level, final Marker marker, final String message, final Object param1, final Object param2) {
+		return isEnabled(level);
+	}
+
+	@Override
+	public boolean isEnabled(final Level level, final Marker marker, final String message, final Object param1, final Object param2, final Object param3) {
+		return isEnabled(level);
+	}
+
+	@Override
+	public boolean isEnabled(final Level level, final Marker marker, final String message, final Object param1, final Object param2, final Object param3,
+			final Object param4) {
+		return isEnabled(level);
+	}
+
+	@Override
+	public boolean isEnabled(final Level level, final Marker marker, final String message, final Object param1, final Object param2, final Object param3,
+			final Object param4, final Object param5) {
+		return isEnabled(level);
+	}
+
+	@Override
+	public boolean isEnabled(final Level level, final Marker marker, final String message, final Object param1, final Object param2, final Object param3,
+			final Object param4, final Object param5, final Object param6) {
+		return isEnabled(level);
+	}
+
+	@Override
+	public boolean isEnabled(final Level level, final Marker marker, final String message, final Object param1, final Object param2, final Object param3,
+			final Object param4, final Object param5, final Object param6, final Object param7) {
+		return isEnabled(level);
+	}
+
+	@Override
+	public boolean isEnabled(final Level level, final Marker marker, final String message, final Object param1, final Object param2, final Object param3,
+			final Object param4, final Object param5, final Object param6, final Object param7, final Object param8) {
+		return isEnabled(level);
+	}
+
+	@Override
+	public boolean isEnabled(final Level level, final Marker marker, final String message, final Object param1, final Object param2, final Object param3,
+			final Object param4, final Object param5, final Object param6, final Object param7, final Object param8, final Object param9) {
+		return isEnabled(level);
+	}
+
+	@Override
+	public boolean isEnabled(final Level level, final Marker marker, final String message, final Object param1, final Object param2, final Object param3,
+			final Object param4, final Object param5, final Object param6, final Object param7, final Object param8, final Object param9,
+			final Object param10) {
+		return isEnabled(level);
+	}
+
+	@Override
 	public boolean isEnabled(final Level level, final Marker marker, final String message, final Throwable t) {
 		return isEnabled(level);
 	}
@@ -105,7 +168,7 @@ public class MemoryLoggerImpl extends AbstractLogger {
 		final Builder builder = new Log4jLogEvent.Builder();
 
 		builder.setIncludeLocation(true).setLevel(level).setLoggerFqcn(getClass().getName()).setLoggerName(getName()).setMarker(marker).setMessage(message)
-		        .setSource(getCaller()).setThrown(t);
+				.setSource(getCaller()).setThrown(t);
 
 		MemoryLoggerFactory.addLogEvent(builder.build());
 	}

@@ -12,6 +12,7 @@ import javax.enterprise.inject.Instance;
 import javax.enterprise.util.AnnotationLiteral;
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.SystemUtils;
 import org.jboss.weld.environment.se.WeldContainer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -51,8 +52,12 @@ public class EnvProducerTest {
 	}
 
 	@Inject
-	@Environment(value = "USERPROFILE", strict = true)
+	@Environment(value = "USERPROFILE", strict = false)
 	private String userProfile;
+
+	@Inject
+	@Environment(value = "HOME", strict = false)
+	private String home;
 
 	@Inject
 	@SystemProperty(value = "java.io.tmpdir", strict = true)
@@ -68,10 +73,19 @@ public class EnvProducerTest {
 
 	@Test
 	public void testEvnorinment() {
-		assertNotNull(userProfile);
-		final File userProfileFile = new File(userProfile);
-		assertTrue(userProfileFile.exists());
-		assertTrue(userProfileFile.isDirectory());
+		File file;
+
+		if (SystemUtils.IS_OS_WINDOWS) {
+			assertNotNull(userProfile);
+			file = new File(userProfile);
+			assertTrue(file.exists());
+			assertTrue(file.isDirectory());
+		} else if (SystemUtils.IS_OS_LINUX) {
+			assertNotNull(home);
+			file = new File(home);
+			assertTrue(file.exists());
+			assertTrue(file.isDirectory());
+		}
 	}
 
 	@Test(expected = NoSuchElementException.class)
