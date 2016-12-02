@@ -1,5 +1,6 @@
 package de.treichels.cdi.env;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -12,6 +13,7 @@ import javax.enterprise.inject.Instance;
 import javax.enterprise.util.AnnotationLiteral;
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.SystemUtils;
 import org.jboss.weld.environment.se.WeldContainer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -51,8 +53,12 @@ public class EnvProducerTest {
 	}
 
 	@Inject
-	@Environment(value = "USERPROFILE", strict = true)
+	@Environment(value = "USERPROFILE", strict = false)
 	private String userProfile;
+
+	@Inject
+	@Environment(value = "SHELL", strict = false)
+	private String shell;
 
 	@Inject
 	@SystemProperty(value = "java.io.tmpdir", strict = true)
@@ -68,10 +74,20 @@ public class EnvProducerTest {
 
 	@Test
 	public void testEvnorinment() {
-		assertNotNull(userProfile);
-		final File userProfileFile = new File(userProfile);
-		assertTrue(userProfileFile.exists());
-		assertTrue(userProfileFile.isDirectory());
+		File file;
+
+		if (SystemUtils.IS_OS_WINDOWS) {
+			assertNotNull(userProfile);
+			file = new File(userProfile);
+			assertTrue(file.exists());
+			assertTrue(file.isDirectory());
+		} else if (SystemUtils.IS_OS_LINUX) {
+			assertNotNull(shell);
+			file = new File(shell);
+			assertTrue(file.exists());
+			assertFalse(file.isDirectory());
+			assertTrue(file.canExecute());
+		}
 	}
 
 	@Test(expected = NoSuchElementException.class)
