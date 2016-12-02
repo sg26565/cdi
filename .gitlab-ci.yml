@@ -6,7 +6,8 @@ image: sgmia/maven:latest
 
 cache:
   key: "global"
-  paths: /root/.m2/
+  paths:
+  - /root/.m2/
   
 build:
   stage: build
