@@ -1,6 +1,5 @@
 package de.treichels.cdi.env;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -57,8 +56,8 @@ public class EnvProducerTest {
 	private String userProfile;
 
 	@Inject
-	@Environment(value = "SHELL", strict = false)
-	private String shell;
+	@Environment(value = "HOME", strict = false)
+	private String home;
 
 	@Inject
 	@SystemProperty(value = "java.io.tmpdir", strict = true)
@@ -82,11 +81,10 @@ public class EnvProducerTest {
 			assertTrue(file.exists());
 			assertTrue(file.isDirectory());
 		} else if (SystemUtils.IS_OS_LINUX) {
-			assertNotNull(shell);
-			file = new File(shell);
+			assertNotNull(home);
+			file = new File(home);
 			assertTrue(file.exists());
-			assertFalse(file.isDirectory());
-			assertTrue(file.canExecute());
+			assertTrue(file.isDirectory());
 		}
 	}
 
