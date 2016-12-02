@@ -6,11 +6,14 @@ variables:
 image: sgmia/maven:latest
 
 before_script:
-  - cp -av /cache/.m2 /root/
+  - test -d /cache/.m2 && cp -av /cache/.m2 /root/
   
 after_script:
-  - cp -av /root/.m2 /cache/
+  - test -d /root/.m2 && cp -av /root/.m2 /cache/
 
+cache:
+  - .m2/
+  
 build:
   stage: build
   script:
