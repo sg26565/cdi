@@ -5,15 +5,9 @@ variables:
 
 image: sgmia/maven:latest
 
-before_script:
-  - test -d /cache/.m2 && cp -av /cache/.m2 /root/
-  
-after_script:
-  - test -d /root/.m2 && cp -av /root/.m2 /cache/
-
 cache:
   paths:
-  - .m2/
+  - /root/.m2/
   
 build:
   stage: build
