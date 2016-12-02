@@ -13,26 +13,26 @@ cache:
 build:
   stage: build
   script:
-  - ls -l /cache
-  - ls -la /root/.m2
+  - ls -laR /cache
+  - ls -laR /root/.m2
   - 'mvn $MAVEN_CLI_OPTS compile'
-  - ls -la /root/.m2/repository
-  - ls -l /cache
-    
+  - ls -laR /cache
+  - ls -laR /root/.m2
+
 test:
   stage: test
   script:
-  - ls -l /cache
-  - ls -la /root/.m2
+  - ls -laR /cache
+  - ls -laR /root/.m2
   - 'mvn $MAVEN_CLI_OPTS verify'
-  - ls -la /root/.m2/repository
-  - ls -l /cache
+  - ls -laR /cache
+  - ls -laR /root/.m2
 
 deploy:
   stage: deploy
   script:
-  - ls -l /cache
-  - ls -la /root/.m2
+  - ls -laR /cache
+  - ls -laR /root/.m2
   - 'mvn $MAVEN_CLI_OPTS -Dmaven.test.skip=true install'
-  - ls -la /root/.m2/repository
-  - ls -l /cache
+  - ls -laR /cache
+  - ls -laR /root/.m2
