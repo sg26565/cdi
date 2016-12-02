@@ -6,12 +6,16 @@ variables:
 image: sgmia/maven:latest
 
 before_script:
-  - zipinfo /cache/$CI_PROJECT_PATH/$CI_BUILD_NAME/$CI_BUILD_REF_NAME/cache.zip
-  - zipinfo /cache/$CI_PROJECT_PATH/global/$CI_BUILD_REF_NAME/cache.zip
+  - echo "############# BEFORE SCRIPT ##################
+  - test -f /cache/$CI_PROJECT_PATH/$CI_BUILD_NAME/$CI_BUILD_REF_NAME/cache.zip && zipinfo /cache/$CI_PROJECT_PATH/$CI_BUILD_NAME/$CI_BUILD_REF_NAME/cache.zip
+  - test -f /cache/$CI_PROJECT_PATH/global/$CI_BUILD_REF_NAME/cache.zip && zipinfo /cache/$CI_PROJECT_PATH/global/$CI_BUILD_REF_NAME/cache.zip
+  - echo "############# BEFORE SCRIPT ##################
   
 after_script:
-  - zipinfo /cache/$CI_PROJECT_PATH/$CI_BUILD_NAME/$CI_BUILD_REF_NAME/cache.zip
-  - zipinfo /cache/$CI_PROJECT_PATH/global/$CI_BUILD_REF_NAME/cache.zip
+  - echo "############# AFTER SCRIPT ##################
+  - test -f /cache/$CI_PROJECT_PATH/$CI_BUILD_NAME/$CI_BUILD_REF_NAME/cache.zip && zipinfo /cache/$CI_PROJECT_PATH/$CI_BUILD_NAME/$CI_BUILD_REF_NAME/cache.zip
+  - test -f /cache/$CI_PROJECT_PATH/global/$CI_BUILD_REF_NAME/cache.zip && zipinfo /cache/$CI_PROJECT_PATH/global/$CI_BUILD_REF_NAME/cache.zip
+  - echo "############# AFTER SCRIPT ##################
 
 cache:
   key: "global"
