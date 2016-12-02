@@ -6,12 +6,12 @@ variables:
 image: sgmia/maven:latest
 
 before_script:
-  - zipinfo /cache/$CI_PROJECT_PATH/$CI_BUILD_NAME/cache.zip
-  - zipinfo /cache/$CI_PROJECT_PATH/global/cache.zip
+  - zipinfo /cache/$CI_PROJECT_PATH/$CI_BUILD_NAME/$CI_BUILD_REF_NAME/cache.zip
+  - zipinfo /cache/$CI_PROJECT_PATH/global/$CI_BUILD_REF_NAME/cache.zip
   
 after_script:
-  - zipinfo /cache/$CI_PROJECT_PATH/$CI_BUILD_NAME/cache.zip
-  - zipinfo /cache/$CI_PROJECT_PATH/global/cache.zip
+  - zipinfo /cache/$CI_PROJECT_PATH/$CI_BUILD_NAME/$CI_BUILD_REF_NAME/cache.zip
+  - zipinfo /cache/$CI_PROJECT_PATH/global/$CI_BUILD_REF_NAME/cache.zip
 
 cache:
   key: "global"
