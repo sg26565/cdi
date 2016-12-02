@@ -5,11 +5,11 @@ variables:
 
 image: sgmia/maven:latest
 
-before_scipt:
+before_script:
   - zipinfo /cache/$CI_PROJECT_PATH/$CI_BUILD_NAME/cache.zip
   - zipinfo /cache/$CI_PROJECT_PATH/global/cache.zip
   
-after_scipt:
+after_script:
   - zipinfo /cache/$CI_PROJECT_PATH/$CI_BUILD_NAME/cache.zip
   - zipinfo /cache/$CI_PROJECT_PATH/global/cache.zip
 
