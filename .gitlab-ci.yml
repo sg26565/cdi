@@ -3,9 +3,11 @@ variables:
   MAVEN_OPTS: "-Dorg.slf4j.simpleLogger.showDateTime=true -Djava.awt.headless=true"
   MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true"
 image: sgmia/maven:latest
+
 cache:
-  paths:
-    - /root/.m2/
+  key: "global"
+  paths: /root/.m2/
+  
 build:
   stage: build
   script: 'mvn $MAVEN_CLI_OPTS compile'
@@ -13,6 +15,7 @@ build:
 test:
   stage: test
   script: 'mvn $MAVEN_CLI_OPTS verify'
+
 deploy:
   stage: deploy
   script: 'mvn $MAVEN_CLI_OPTS -Dmaven.test.skip=true install'
