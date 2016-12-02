@@ -6,10 +6,8 @@ variables:
 image: sgmia/maven:latest
 
 before_script:
-  - mount
-  - df
-  - ls -al /cache
-  - ls -al /root
+  - rm -rf /root/.m2
+  - ln -s /cache/.m2 /root/.m2
   
 cache:
   paths:
