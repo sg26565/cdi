@@ -7,14 +7,14 @@ image: sgmia/maven:latest
 
 before_script:
   - echo '<<<<<<< BEFORE SCRIPT >>>>>>>'
-  - test -f /cache/$CI_PROJECT_PATH/$CI_BUILD_NAME/$CI_BUILD_REF_NAME/cache.zip && zipinfo /cache/$CI_PROJECT_PATH/$CI_BUILD_NAME/$CI_BUILD_REF_NAME/cache.zip
-  - test -f /cache/$CI_PROJECT_PATH/global/$CI_BUILD_REF_NAME/cache.zip && zipinfo /cache/$CI_PROJECT_PATH/global/$CI_BUILD_REF_NAME/cache.zip
+  - test -f /cache/$CI_PROJECT_PATH/$CI_BUILD_NAME/$CI_BUILD_REF_NAME/cache.zip && zipinfo /cache/$CI_PROJECT_PATH/$CI_BUILD_NAME/$CI_BUILD_REF_NAME/cache.zip || true
+  - test -f /cache/$CI_PROJECT_PATH/global/$CI_BUILD_REF_NAME/cache.zip && zipinfo /cache/$CI_PROJECT_PATH/global/$CI_BUILD_REF_NAME/cache.zip || true
   - echo '<<<<<<< BEFORE SCRIPT >>>>>>>'
   
 after_script:
   - echo '<<<<<<< AFTER SCRIPT >>>>>>>'
-  - test -f /cache/$CI_PROJECT_PATH/$CI_BUILD_NAME/$CI_BUILD_REF_NAME/cache.zip && zipinfo /cache/$CI_PROJECT_PATH/$CI_BUILD_NAME/$CI_BUILD_REF_NAME/cache.zip
-  - test -f /cache/$CI_PROJECT_PATH/global/$CI_BUILD_REF_NAME/cache.zip && zipinfo /cache/$CI_PROJECT_PATH/global/$CI_BUILD_REF_NAME/cache.zip
+  - test -f /cache/$CI_PROJECT_PATH/$CI_BUILD_NAME/$CI_BUILD_REF_NAME/cache.zip && zipinfo /cache/$CI_PROJECT_PATH/$CI_BUILD_NAME/$CI_BUILD_REF_NAME/cache.zip || true
+  - test -f /cache/$CI_PROJECT_PATH/global/$CI_BUILD_REF_NAME/cache.zip && zipinfo /cache/$CI_PROJECT_PATH/global/$CI_BUILD_REF_NAME/cache.zip || true
   - echo '<<<<<<< AFTER SCRIPT >>>>>>>'
 
 cache:
