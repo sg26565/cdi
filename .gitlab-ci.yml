@@ -5,34 +5,30 @@ variables:
 
 image: sgmia/maven:latest
 
+before_scipt:
+  - zipinfo /cache/$CI_PROJECT_PATH/$CI_BUILD_NAME/cache.zip
+  - zipinfo /cache/$CI_PROJECT_PATH/global/cache.zip
+  
+after_scipt:
+  - zipinfo /cache/$CI_PROJECT_PATH/$CI_BUILD_NAME/cache.zip
+  - zipinfo /cache/$CI_PROJECT_PATH/global/cache.zip
+
 cache:
   key: "global"
   paths:
-  - /root/.m2/
+  - .m2/
   
 build:
   stage: build
   script:
-  - ls -laR /cache
-  - ls -laR /root/.m2
   - 'mvn $MAVEN_CLI_OPTS compile'
-  - ls -laR /cache
-  - ls -laR /root/.m2
 
 test:
   stage: test
   script:
-  - ls -laR /cache
-  - ls -laR /root/.m2
   - 'mvn $MAVEN_CLI_OPTS verify'
-  - ls -laR /cache
-  - ls -laR /root/.m2
 
 deploy:
   stage: deploy
   script:
-  - ls -laR /cache
-  - ls -laR /root/.m2
   - 'mvn $MAVEN_CLI_OPTS -Dmaven.test.skip=true install'
-  - ls -laR /cache
-  - ls -laR /root/.m2
