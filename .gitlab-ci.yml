@@ -6,22 +6,11 @@ variables:
 image: sgmia/maven:latest
 
 before_script:
-  - echo '<<<<<<< BEFORE SCRIPT >>>>>>>'
-  - test -f /cache/$CI_PROJECT_PATH/$CI_BUILD_NAME/$CI_BUILD_REF_NAME/cache.zip && zipinfo /cache/$CI_PROJECT_PATH/$CI_BUILD_NAME/$CI_BUILD_REF_NAME/cache.zip || true
-  - test -f /cache/$CI_PROJECT_PATH/global/$CI_BUILD_REF_NAME/cache.zip && zipinfo /cache/$CI_PROJECT_PATH/global/$CI_BUILD_REF_NAME/cache.zip || true
-  - echo '<<<<<<< BEFORE SCRIPT >>>>>>>'
+  - cp -av /cache/.m2 /root/
   
 after_script:
-  - echo '<<<<<<< AFTER SCRIPT >>>>>>>'
-  - test -f /cache/$CI_PROJECT_PATH/$CI_BUILD_NAME/$CI_BUILD_REF_NAME/cache.zip && zipinfo /cache/$CI_PROJECT_PATH/$CI_BUILD_NAME/$CI_BUILD_REF_NAME/cache.zip || true
-  - test -f /cache/$CI_PROJECT_PATH/global/$CI_BUILD_REF_NAME/cache.zip && zipinfo /cache/$CI_PROJECT_PATH/global/$CI_BUILD_REF_NAME/cache.zip || true
-  - echo '<<<<<<< AFTER SCRIPT >>>>>>>'
+  - cp -av /root/.m2 /cache/
 
-cache:
-  key: "global"
-  paths:
-  - .m2/
-  
 build:
   stage: build
   script:
