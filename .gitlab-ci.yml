@@ -12,6 +12,7 @@ after_script:
   - test -d /root/.m2 && cp -av /root/.m2 /cache/
 
 cache:
+  paths:
   - .m2/
   
 build:
