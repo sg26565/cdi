@@ -5,7 +5,7 @@ variables:
 image: sgmia/maven:latest
 cache:
   paths:
-    - ~/.m2/repository/
+    - /root/.m2/
 build:
   stage: build
   script: 'mvn $MAVEN_CLI_OPTS compile'
